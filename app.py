@@ -1,10 +1,15 @@
 from flask import Flask, request, jsonify, render_template
 import replicate
+from dotenv import load_dotenv
+import os
+
+# Memuat variabel lingkungan dari .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Token API
-api_token = "r8_CRqulJm52htpRV5zIpe4HV6hvyuz6Sm3w6HlG"
+# Ambil API token dari variabel lingkungan
+api_token = os.getenv("REPLICATE_API_TOKEN")
 client = replicate.Client(api_token=api_token)
 
 @app.route('/')
@@ -27,8 +32,6 @@ def generate_image():
         return jsonify({"error": str(e)}), 500
     
     return jsonify({"image_url": output})
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
